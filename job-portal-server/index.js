@@ -10,7 +10,7 @@ app.use(express.json());
 app.use(cors());
 
 
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@job-portal-demo.rjpms.mongodb.net/?retryWrites=true&w=majority&appName=job-portal-demo`;
 
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
@@ -50,6 +50,21 @@ async function run() {
     app.get("/all-jobs", async (req, res) => {
       const jobs = await jobsCollections.find({}).toArray()
       res.send(jobs);
+    })
+
+    // get jobs by email
+    app.get("/myJobs/:email", async(req,res) => {
+      // console.log(req.params.email);
+      const jobs = await jobsCollections.find({postedBy: req.params.email}).toArray();
+      res.send(jobs);
+    })
+
+    // delete a job
+    app.delete("/job/:id", async(req,res) => {
+      const id = req.params.id;
+      const filter = {_id: new ObjectId(id)}
+      const result = await jobsCollections.deleteOne(filter);
+      res.send(result);
     })
 
     // Send a ping to confirm a successful connection
