@@ -18,11 +18,14 @@ const CreateJob = () => {
     fetch("http://localhost:3000/post-job", {
       method: "POST",
       headers: { "content-type": "application/json" },
-      body: JSON.stringify(data),
+      body: JSON.stringify(data)
     })
       .then((res) => res.json())
       .then((result) => {
         console.log(result);
+        if(result.acknowledged === true){
+          alert("Job Posted Successfully!");
+        }
       });
   };
 

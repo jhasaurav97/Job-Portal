@@ -13,7 +13,7 @@ const MyJobs = () => {
       .then((data) => {
         setJobs(data);
       });
-  }, []);
+  }, [isLoading]);
 
   const handleSearch = () => {
     const filter = jobs.filter(
@@ -26,8 +26,14 @@ const MyJobs = () => {
   };
 
   const handleDelete = (id) => {
-    console.log(id);
-    
+    // console.log(id);
+    fetch(`http://localhost:3000/job/${id}`, {
+      method: "DELETE"
+    }).then(res => res.json()).then(data => {
+      if(data.acknowledged === true){
+        alert("Job Deleted Successfully!");
+      }
+    })
   }
 
   return (
@@ -151,7 +157,6 @@ const MyJobs = () => {
                     className="text-blueGray-500 hover:text-blueGray-800"
                     target="_blank"
                   >
-                    {" "}
                     Creative Tim
                   </a>
                   .
@@ -166,3 +171,5 @@ const MyJobs = () => {
 };
 
 export default MyJobs;
+
+// Time => 2 : 34 : 42 ......
